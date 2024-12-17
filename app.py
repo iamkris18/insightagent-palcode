@@ -1,27 +1,31 @@
-from flask import Flask, jsonify, request, json
-import psycopg2
+from flask import Flask, jsonify, request
 from openai import OpenAI
+import config, helpers
 
 app = Flask(__name__)
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=config.OPENAI_API_KEY)
 
-@app.route('/ask_openai', methods=['POST'])
+@app.route('/custom_question', methods=['POST'])
 def ask_openai():
     try:
-        invoices = load_invoice_data()
+        invoices = helpers.load_invoice_data()
         if not invoices:
-            return jsonify({"error": "No invoice data found"}), 500
+            return generate_response(500, "No invoice data found")
 
         user_query = request.json.get("query", "")
         if not user_query:
-            return jsonify({"error": "Query cannot be empty"}), 400
+            return generate_response({400, "Query cannot be empty"})
 
         invoice_summary = "\n\n".join([
             f"Invoice ID: {inv.get('id', 'N/A')}\n"
             f"Vendor: {inv.get('vendor_name', 'Unknown')}\n"
             f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0):,.2f}\n"
+            f"Invoice Number: {inv.get('invoice_number', 'N/A')}"
+            f"status: {inv.get('status','N/A')}\n"
+            f"Payment Status: {inv.get('payment_date','N/A')}\n"
             f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0):,.2f}\n"
             f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.2f}\n"
+            f"Payment Date: {inv.get('payment_date', 'N/A')}"
             for inv in invoices
         ])
 
@@ -47,42 +51,23 @@ def ask_openai():
 
         if "current score" in user_query.lower() or "score of the match" in user_query.lower():
             response = "I am currently unable to provide live match scores. Please check a sports application for real-time updates."
-            return jsonify({"response": response})
+            return generate_response(200, response)
 
         openai_answer = response
-        return jsonify({"response": openai_answer})
+        return generate_response(200, openai_answer)
 
     except Exception as e:
         print("Error:", e)
-        return jsonify({"error": "Something went wrong", "details": str(e)}), 500
-
-
-def load_invoice_data():
-    try:
-        with open('data.json', 'r') as file:
-            data = json.load(file)
-        return data
-    except Exception as e:
-        print("Error loading data.json:", e)
-        return []
-
-def get_db_connection():
-    conn = psycopg2.connect(
-        host="localhost",
-        database="palcode_db",
-        user="postgres",
-        password="password"
-    )
-    return conn
+        return jsonify({"status": 500, "error": "Something went wrong", "details": str(e)})
 
 @app.route('/invoices', methods=['GET'])
 def example():
-    data = load_invoice_data()
-    return data
+    data = helpers.load_invoice_data()
+    return jsonify(data)
 
 @app.route('/top_invoices', methods=['GET'])
 def top_invoices():
-    conn = get_db_connection()
+    conn = helpers.get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
         SELECT id, vendor_name, current_payment_due
@@ -105,7 +90,7 @@ def top_invoices():
 
 @app.route('/invoice_summary', methods=['GET'])
 def invoice_summary():
-    conn = get_db_connection()
+    conn = helpers.get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
         SELECT id, vendor_name, balance_to_finish_including_retainage
@@ -118,18 +103,27 @@ def invoice_summary():
 
     if invoice:
         response = {
+            "status": 200,
             "Invoice ID": invoice[0],
             "Vendor Name": invoice[1],
             "Balance Pending": f"${invoice[2]:,.2f}"
         }
     else:
-        response = {"message": "No invoice found"}
+        return generate_response(200,"no invoice found")
 
     return jsonify(response)
 
 @app.route('/')  # Define a route for the home page
 def home():
     return "Hello, World!"
+
+def generate_response(status_code, message, data=None):
+    response = {
+        "status": status_code,
+        "message": message
+    }
+
+    return jsonify(response), status_code
 
 if __name__ == '__main__':
     app.run(debug=True)
