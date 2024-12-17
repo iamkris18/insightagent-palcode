@@ -21,21 +21,21 @@ def ask_openai():
 
         invoice_summary = "\n\n".join([
             "\n".join([
-                f"Invoice ID: {inv.get('id', 'N/A')}",
-                f"Vendor: {inv.get('vendor_name', 'Unknown')}",
-                f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0)}",
-                f"Invoice Number: {inv.get('invoice_number', 'N/A')}",
-                f"Status: {inv.get('status', 'N/A')}",
-                f"Payment Status: {inv.get('payment_date', 'N/A')}",
-                f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0)}",
-                f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.1f}",
-                f"Payment Date: {inv.get('payment_date', 'N/A')}",
-                f"Created By ID: {inv.get('created_by', {}).get('id', 'N/A')}",
-                f"Created By Name: {inv.get('created_by', {}).get('name', 'N/A')}",
-                f"Created By Login: {inv.get('created_by', {}).get('login', 'N/A')}",
-                f"Created By Company: {inv.get('created_by', {}).get('company_name', 'N/A')}"
+                f"Invoice ID: {i.get('id', 'N/A')}",
+                f"Vendor: {i.get('vendor_name', 'Unknown')}",
+                f"**Total Claimed Amount:** ${i.get('total_claimed_amount', 0)}",
+                f"Invoice Number: {i.get('invoice_number', 'N/A')}",
+                f"Status: {i.get('status', 'N/A')}",
+                f"Payment Status: {i.get('payment_date', 'N/A')}",
+                f"**Balance to Finish (Including Retainage):** ${i.get('summary', {}).get('balance_to_finish_including_retainage', 0)}",
+                f"**Current Payment Due:** ${i.get('summary', {}).get('current_payment_due', 0):,.1f}",
+                f"Payment Date: {i.get('payment_date', 'N/A')}",
+                f"Created By ID: {i.get('created_by', {}).get('id', 'N/A')}",
+                f"Created By Name: {i.get('created_by', {}).get('name', 'N/A')}",
+                f"Created By Login: {i.get('created_by', {}).get('login', 'N/A')}",
+                f"Created By Company: {i.get('created_by', {}).get('company_name', 'N/A')}"
             ]) 
-            for inv in invoices
+            for i in invoices
         ])
 
 
@@ -148,5 +148,9 @@ def generate_response(status_code, message, data=None):
 
     return jsonify(response), status_code
 
-if __name__ == '__main__':
+def main() -> None:
     app.run(debug=True)
+
+if __name__ == '__main__':
+    main()
+
