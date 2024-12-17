@@ -1,21 +1,87 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, json
 import psycopg2
+from openai import OpenAI
 
 app = Flask(__name__)
+client = OpenAI(api_key="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")
 
-# Connect to the PostgreSQL database
+@app.route('/ask_openai', methods=['POST'])
+def ask_openai():
+    try:
+        invoices = load_invoice_data()
+        if not invoices:
+            return jsonify({"error": "No invoice data found"}), 500
+
+        user_query = request.json.get("query", "")
+        if not user_query:
+            return jsonify({"error": "Query cannot be empty"}), 400
+
+        invoice_summary = "\n\n".join([
+            f"Invoice ID: {inv.get('id', 'N/A')}\n"
+            f"Vendor: {inv.get('vendor_name', 'Unknown')}\n"
+            f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0):,.2f}\n"
+            f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0):,.2f}\n"
+            f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.2f}\n"
+            for inv in invoices
+        ])
+
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant analyzing invoice data."},
+                {"role": "system", "content": f"The following is the invoice data:{invoice_summary}"},
+                {"role": "user", "content": user_query}
+            ],
+        )
+        openai_answer = response.choices[0].message.content.strip()
+
+        if "highest balance" in user_query.lower():
+            highest_balance_invoice = max(invoices, key=lambda x: x.get('summary', {}).get('balance_to_finish_including_retainage', 0))
+            invoice_id = highest_balance_invoice.get('id')
+            balance = highest_balance_invoice.get('summary', {}).get('balance_to_finish_including_retainage', 0)
+
+            response = f"Here you go, The invoice with Id {invoice_id} has the highest balance amount pending with an amount ${balance:,.2f}."
+        else:
+            response = openai_answer
+
+        if "current score" in user_query.lower() or "score of the match" in user_query.lower():
+            response = "I am currently unable to provide live match scores. Please check a sports application for real-time updates."
+            return jsonify({"response": response})
+
+        openai_answer = response
+        return jsonify({"response": openai_answer})
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": "Something went wrong", "details": str(e)}), 500
+
+
+def load_invoice_data():
+    try:
+        with open('data.json', 'r') as file:
+            data = json.load(file)
+        return data
+    except Exception as e:
+        print("Error loading data.json:", e)
+        return []
+
 def get_db_connection():
     conn = psycopg2.connect(
-        host="localhost",  # e.g., "localhost" or an IP address
-        database="palcode_db",  # the database you want to connect to
-        user="postgres",  # your PostgreSQL username
-        password="password"  # your PostgreSQL password
+        host="localhost",
+        database="palcode_db",
+        user="postgres",
+        password="password"
     )
     return conn
 
+@app.route('/invoices', methods=['GET'])
+def example():
+    data = load_invoice_data()
+    return data
+
 @app.route('/top_invoices', methods=['GET'])
 def top_invoices():
-    # Fetch top 5 invoices based on the current_payment_due
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
@@ -27,7 +93,6 @@ def top_invoices():
     invoices = cursor.fetchall()
     conn.close()
 
-    # Format the response
     response = []
     for invoice in invoices:
         response.append({
@@ -38,37 +103,8 @@ def top_invoices():
 
     return jsonify(response)
 
-@app.route('/invoice_all', methods=['GET'])
-def invoice_all():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Query to fetch all invoices
-    cursor.execute('SELECT * from invoices;')
-    invoices = cursor.fetchall()
-
-    conn.close()
-
-    # Check if there are any invoices
-    if invoices:
-        # Format the response for all invoices
-        response = []
-        for invoice in invoices:
-            response.append({
-                "Invoice ID": invoice[0],  # Assuming invoice ID is in the first column
-                "Vendor Name": invoice[1],  # Assuming vendor name is in the second column
-                "Balance Pending": f"${invoice[2]}"  # Assuming balance is in the third column
-            })
-    else:
-        response = {"message": "No invoices found"}
-
-    return jsonify(response)
-
-    
-
 @app.route('/invoice_summary', methods=['GET'])
 def invoice_summary():
-    # Fetch the invoice with the highest balance
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
@@ -80,7 +116,6 @@ def invoice_summary():
     invoice = cursor.fetchone()
     conn.close()
 
-    # Format the response
     if invoice:
         response = {
             "Invoice ID": invoice[0],
