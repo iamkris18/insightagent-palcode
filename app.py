@@ -20,19 +20,21 @@ def ask_openai():
             return generate_response({400, "Query cannot be empty"})
 
         invoice_summary = "\n\n".join([
-            f"Invoice ID: {inv.get('id', 'N/A')}\n"
-            f"Vendor: {inv.get('vendor_name', 'Unknown')}\n"
-            f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0):,.2f}\n"
-            f"Invoice Number: {inv.get('invoice_number', 'N/A')}\n"
-            f"Status: {inv.get('status', 'N/A')}\n"
-            f"Payment Status: {inv.get('payment_date', 'N/A')}\n"
-            f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0):,.2f}\n"
-            f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.2f}\n"
-            f"Payment Date: {inv.get('payment_date', 'N/A')}\n"
-            f"Created By ID: {inv.get('created_by', {}).get('id', 'N/A')}\n"
-            f"Created By Name: {inv.get('created_by', {}).get('name', 'N/A')}\n"
-            f"Created By Login: {inv.get('created_by', {}).get('login', 'N/A')}\n"
-            f"Created By Company: {inv.get('created_by', {}).get('company_name', 'N/A')}\n"
+            "\n".join([
+                f"Invoice ID: {inv.get('id', 'N/A')}",
+                f"Vendor: {inv.get('vendor_name', 'Unknown')}",
+                f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0)}",
+                f"Invoice Number: {inv.get('invoice_number', 'N/A')}",
+                f"Status: {inv.get('status', 'N/A')}",
+                f"Payment Status: {inv.get('payment_date', 'N/A')}",
+                f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0)}",
+                f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.1f}",
+                f"Payment Date: {inv.get('payment_date', 'N/A')}",
+                f"Created By ID: {inv.get('created_by', {}).get('id', 'N/A')}",
+                f"Created By Name: {inv.get('created_by', {}).get('name', 'N/A')}",
+                f"Created By Login: {inv.get('created_by', {}).get('login', 'N/A')}",
+                f"Created By Company: {inv.get('created_by', {}).get('company_name', 'N/A')}"
+            ]) 
             for inv in invoices
         ])
 
