@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from openai import OpenAI
 import config, helpers
+from psycopg2.extras import DictCursor
 
 app = Flask(__name__)
 client = OpenAI(api_key=config.OPENAI_API_KEY)
@@ -62,13 +63,12 @@ def ask_openai():
 
 @app.route('/invoices', methods=['GET'])
 def example():
-    data = helpers.load_invoice_data()
-    return jsonify(data)
+    return jsonify(helpers.load_invoice_data())
 
 @app.route('/top_invoices', methods=['GET'])
 def top_invoices():
     conn = helpers.get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=DictCursor)
     cursor.execute('''
         SELECT id, vendor_name, current_payment_due
         FROM invoices
@@ -81,9 +81,9 @@ def top_invoices():
     response = []
     for invoice in invoices:
         response.append({
-            "Invoice ID": invoice[0],
-            "Vendor Name": invoice[1],
-            "Invoice Amount": invoice[2]
+            "Invoice ID": invoice["id"],
+            "Vendor Name": invoice["vendor_name"],
+            "Invoice Amount": invoice["current_payment_due"]
         })
 
     return jsonify(response)
@@ -91,7 +91,7 @@ def top_invoices():
 @app.route('/invoice_summary', methods=['GET'])
 def invoice_summary():
     conn = helpers.get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=DictCursor)
     cursor.execute('''
         SELECT id, vendor_name, balance_to_finish_including_retainage
         FROM invoices
@@ -104,9 +104,9 @@ def invoice_summary():
     if invoice:
         response = {
             "status": 200,
-            "Invoice ID": invoice[0],
-            "Vendor Name": invoice[1],
-            "Balance Pending": f"${invoice[2]:,.2f}"
+            "Invoice ID": invoice["id"],
+            "Vendor Name": invoice["vendor_name"],
+            "Balance Pending": invoice["balance_to_finish_including_retainage"]
         }
     else:
         return generate_response(200,"no invoice found")
