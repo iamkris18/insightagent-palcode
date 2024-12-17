@@ -13,198 +13,188 @@
         "completed_work_retainage_amount": 1100.00,
         "contract_sum_to_date": 1250000.00,
         "current_payment_due": 9500.00
+      },
+      "created_by": {
+        "id": 1738090,
+        "name": "John Doe",
+        "login": "johndoe@example.com",
+        "company_name": "Builders Inc."
       }
     },
     {
       "id": 58824,
       "project_id": 793,
-      "billing_date": "2013-11-24",
-      "vendor_name": "BlueTech Electricals",
+      "billing_date": "2013-11-25",
+      "vendor_name": "Rapid Construction",
       "invoice_number": 127,
-      "total_claimed_amount": 300.00,
-      "payment_date": "2013-11-19",
+      "total_claimed_amount": 200.00,
+      "payment_date": "2013-11-22",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 18000.00,
-        "completed_work_retainage_amount": 800.00,
-        "contract_sum_to_date": 950000.00,
-        "current_payment_due": 7500.00
+        "balance_to_finish_including_retainage": 29000.00,
+        "completed_work_retainage_amount": 1200.00,
+        "contract_sum_to_date": 1300000.00,
+        "current_payment_due": 9700.00
+      },
+      "created_by": {
+        "id": 1738091,
+        "name": "Jane Smith",
+        "login": "janesmith@example.com",
+        "company_name": "Rapid Inc."
       }
     },
     {
       "id": 58825,
       "project_id": 794,
-      "billing_date": "2013-11-25",
-      "vendor_name": "Tech Constructions",
+      "billing_date": "2013-11-26",
+      "vendor_name": "Top Contractors",
       "invoice_number": 128,
       "total_claimed_amount": 250.00,
-      "payment_date": "2013-11-20",
+      "payment_date": "2013-11-23",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 32000.00,
-        "completed_work_retainage_amount": 1400.00,
-        "contract_sum_to_date": 1380000.00,
-        "current_payment_due": 12000.00
+        "balance_to_finish_including_retainage": 31000.00,
+        "completed_work_retainage_amount": 1300.00,
+        "contract_sum_to_date": 1350000.00,
+        "current_payment_due": 9900.00
+      },
+      "created_by": {
+        "id": 1738092,
+        "name": "Michael Brown",
+        "login": "michaelbrown@example.com",
+        "company_name": "Prime Builders"
       }
     },
     {
       "id": 58826,
       "project_id": 795,
-      "billing_date": "2013-11-26",
-      "vendor_name": "RedBrick Builders",
+      "billing_date": "2013-11-28",
+      "vendor_name": "Quality Developers",
       "invoice_number": 129,
-      "total_claimed_amount": 225.00,
-      "payment_date": "2013-11-21",
+      "total_claimed_amount": 300.00,
+      "payment_date": "2013-11-25",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 22000.00,
-        "completed_work_retainage_amount": 1300.00,
-        "contract_sum_to_date": 1100000.00,
-        "current_payment_due": 10500.00
+        "balance_to_finish_including_retainage": 32000.00,
+        "completed_work_retainage_amount": 1400.00,
+        "contract_sum_to_date": 1400000.00,
+        "current_payment_due": 10100.00
+      },
+      "created_by": {
+        "id": 1738090,
+        "name": "John Doe",
+        "login": "johndoe@example.com",
+        "company_name": "Builders Inc."
       }
     },
     {
       "id": 58827,
       "project_id": 796,
-      "billing_date": "2013-11-27",
-      "vendor_name": "New Age Construction",
+      "billing_date": "2013-11-29",
+      "vendor_name": "Swift Construction",
       "invoice_number": 130,
-      "total_claimed_amount": 275.00,
-      "payment_date": "2013-11-22",
+      "total_claimed_amount": 225.00,
+      "payment_date": "2013-11-26",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 5000.00,
-        "completed_work_retainage_amount": 900.00,
-        "contract_sum_to_date": 800000.00,
-        "current_payment_due": 4600.00
+        "balance_to_finish_including_retainage": 33000.00,
+        "completed_work_retainage_amount": 1500.00,
+        "contract_sum_to_date": 1450000.00,
+        "current_payment_due": 10200.00
+      },
+      "created_by": {
+        "id": 1738091,
+        "name": "Jane Smith",
+        "login": "janesmith@example.com",
+        "company_name": "Rapid Inc."
       }
     },
     {
       "id": 58828,
       "project_id": 797,
-      "billing_date": "2013-11-28",
-      "vendor_name": "CityConstruct",
+      "billing_date": "2013-12-01",
+      "vendor_name": "Fast Builders",
       "invoice_number": 131,
-      "total_claimed_amount": 175.00,
-      "payment_date": "2013-11-23",
+      "total_claimed_amount": 180.00,
+      "payment_date": "2013-11-29",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 21000.00,
-        "completed_work_retainage_amount": 1000.00,
-        "contract_sum_to_date": 1200000.00,
-        "current_payment_due": 9500.00
+        "balance_to_finish_including_retainage": 34000.00,
+        "completed_work_retainage_amount": 1600.00,
+        "contract_sum_to_date": 1500000.00,
+        "current_payment_due": 10300.00
+      },
+      "created_by": {
+        "id": 1738090,
+        "name": "John Doe",
+        "login": "johndoe@example.com",
+        "company_name": "Builders Inc."
       }
     },
     {
       "id": 58829,
       "project_id": 798,
-      "billing_date": "2013-11-29",
-      "vendor_name": "GreenPower Systems",
+      "billing_date": "2013-12-02",
+      "vendor_name": "Top Contractors",
       "invoice_number": 132,
-      "total_claimed_amount": 350.00,
-      "payment_date": "2013-11-24",
+      "total_claimed_amount": 150.00,
+      "payment_date": "2013-12-01",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 16000.00,
-        "completed_work_retainage_amount": 1300.00,
-        "contract_sum_to_date": 1500000.00,
-        "current_payment_due": 11500.00
+        "balance_to_finish_including_retainage": 35000.00,
+        "completed_work_retainage_amount": 1700.00,
+        "contract_sum_to_date": 1550000.00,
+        "current_payment_due": 10400.00
+      },
+      "created_by": {
+        "id": 1738092,
+        "name": "Michael Brown",
+        "login": "michaelbrown@example.com",
+        "company_name": "Prime Builders"
       }
     },
     {
       "id": 58830,
       "project_id": 799,
-      "billing_date": "2013-11-30",
-      "vendor_name": "Skyline Projects",
+      "billing_date": "2013-12-04",
+      "vendor_name": "Quality Developers",
       "invoice_number": 133,
-      "total_claimed_amount": 200.00,
-      "payment_date": "2013-11-25",
+      "total_claimed_amount": 275.00,
+      "payment_date": "2013-12-03",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 15000.00,
-        "completed_work_retainage_amount": 800.00,
-        "contract_sum_to_date": 950000.00,
-        "current_payment_due": 8200.00
+        "balance_to_finish_including_retainage": 36000.00,
+        "completed_work_retainage_amount": 1800.00,
+        "contract_sum_to_date": 1600000.00,
+        "current_payment_due": 10500.00
+      },
+      "created_by": {
+        "id": 1738091,
+        "name": "Jane Smith",
+        "login": "janesmith@example.com",
+        "company_name": "Rapid Inc."
       }
     },
     {
       "id": 58831,
       "project_id": 800,
-      "billing_date": "2013-12-01",
-      "vendor_name": "Solid Builders",
-      "invoice_number": 134,
-      "total_claimed_amount": 125.00,
-      "payment_date": "2013-11-26",
-      "status": "approved",
-      "summary": {
-        "balance_to_finish_including_retainage": 21000.00,
-        "completed_work_retainage_amount": 1100.00,
-        "contract_sum_to_date": 1050000.00,
-        "current_payment_due": 9600.00
-      }
-    },
-    {
-      "id": 58832,
-      "project_id": 801,
-      "billing_date": "2013-12-02",
-      "vendor_name": "NextGen Engineers",
-      "invoice_number": 135,
-      "total_claimed_amount": 300.00,
-      "payment_date": "2013-11-27",
-      "status": "approved",
-      "summary": {
-        "balance_to_finish_including_retainage": 12000.00,
-        "completed_work_retainage_amount": 1000.00,
-        "contract_sum_to_date": 800000.00,
-        "current_payment_due": 7500.00
-      }
-    },
-    {
-      "id": 58833,
-      "project_id": 802,
-      "billing_date": "2013-12-03",
-      "vendor_name": "Ultra Engineering",
-      "invoice_number": 136,
-      "total_claimed_amount": 175.00,
-      "payment_date": "2013-11-28",
-      "status": "approved",
-      "summary": {
-        "balance_to_finish_including_retainage": 23000.00,
-        "completed_work_retainage_amount": 1000.00,
-        "contract_sum_to_date": 1150000.00,
-        "current_payment_due": 10500.00
-      }
-    },
-    {
-      "id": 58834,
-      "project_id": 803,
-      "billing_date": "2013-12-04",
-      "vendor_name": "Prime Construction",
-      "invoice_number": 137,
-      "total_claimed_amount": 150.00,
-      "payment_date": "2013-11-29",
-      "status": "approved",
-      "summary": {
-        "balance_to_finish_including_retainage": 28000.00,
-        "completed_work_retainage_amount": 1300.00,
-        "contract_sum_to_date": 1250000.00,
-        "current_payment_due": 9500.00
-      }
-    },
-    {
-      "id": 58835,
-      "project_id": 804,
       "billing_date": "2013-12-05",
-      "vendor_name": "Dynamic Constructions",
-      "invoice_number": 138,
-      "total_claimed_amount": 250.00,
-      "payment_date": "2013-11-30",
+      "vendor_name": "Swift Construction",
+      "invoice_number": 134,
+      "total_claimed_amount": 290.00,
+      "payment_date": "2013-12-04",
       "status": "approved",
       "summary": {
-        "balance_to_finish_including_retainage": 22000.00,
-        "completed_work_retainage_amount": 1400.00,
-        "contract_sum_to_date": 1300000.00,
-        "current_payment_due": 13000.00
+        "balance_to_finish_including_retainage": 37000.00,
+        "completed_work_retainage_amount": 1900.00,
+        "contract_sum_to_date": 1650000.00,
+        "current_payment_due": 10600.00
+      },
+      "created_by": {
+        "id": 1738090,
+        "name": "John Doe",
+        "login": "johndoe@example.com",
+        "company_name": "Builders Inc."
       }
     }
   ]

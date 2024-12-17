@@ -2,10 +2,10 @@ import json
 import psycopg2
 
 conn = psycopg2.connect(
-    host="localhost",  # e.g., "localhost" or an IP address
-    database="palcode_db",  # the database you want to connect to
-    user="postgres",  # your PostgreSQL username
-    password="password"  # your PostgreSQL password
+    host="localhost",  
+    database="palcode_db",
+    user="postgres", 
+    password="password"
 )
 cursor = conn.cursor()
 

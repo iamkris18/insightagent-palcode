@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from openai import OpenAI
 import config, helpers
 from psycopg2.extras import DictCursor
+import logging
+logging.basicConfig(level=logging.ERROR)
 
 app = Flask(__name__)
 client = OpenAI(api_key=config.OPENAI_API_KEY)
@@ -21,12 +23,16 @@ def ask_openai():
             f"Invoice ID: {inv.get('id', 'N/A')}\n"
             f"Vendor: {inv.get('vendor_name', 'Unknown')}\n"
             f"**Total Claimed Amount:** ${inv.get('total_claimed_amount', 0):,.2f}\n"
-            f"Invoice Number: {inv.get('invoice_number', 'N/A')}"
-            f"status: {inv.get('status','N/A')}\n"
-            f"Payment Status: {inv.get('payment_date','N/A')}\n"
+            f"Invoice Number: {inv.get('invoice_number', 'N/A')}\n"
+            f"Status: {inv.get('status', 'N/A')}\n"
+            f"Payment Status: {inv.get('payment_date', 'N/A')}\n"
             f"**Balance to Finish (Including Retainage):** ${inv.get('summary', {}).get('balance_to_finish_including_retainage', 0):,.2f}\n"
             f"**Current Payment Due:** ${inv.get('summary', {}).get('current_payment_due', 0):,.2f}\n"
-            f"Payment Date: {inv.get('payment_date', 'N/A')}"
+            f"Payment Date: {inv.get('payment_date', 'N/A')}\n"
+            f"Created By ID: {inv.get('created_by', {}).get('id', 'N/A')}\n"
+            f"Created By Name: {inv.get('created_by', {}).get('name', 'N/A')}\n"
+            f"Created By Login: {inv.get('created_by', {}).get('login', 'N/A')}\n"
+            f"Created By Company: {inv.get('created_by', {}).get('company_name', 'N/A')}\n"
             for inv in invoices
         ])
 
@@ -39,6 +45,10 @@ def ask_openai():
                 {"role": "user", "content": user_query}
             ],
         )
+
+        if not response.choices:
+            return generate_response(500, "OpenAI response error: No choices found.")
+        
         openai_answer = response.choices[0].message.content.strip()
 
         if "highest balance" in user_query.lower():
@@ -58,6 +68,7 @@ def ask_openai():
         return generate_response(200, openai_answer)
 
     except Exception as e:
+        logging.error(f"Error occurred: {str(e)}")
         print("Error:", e)
         return jsonify({"status": 500, "error": "Something went wrong", "details": str(e)})
 
@@ -67,53 +78,63 @@ def example():
 
 @app.route('/top_invoices', methods=['GET'])
 def top_invoices():
-    conn = helpers.get_db_connection()
-    cursor = conn.cursor(cursor_factory=DictCursor)
-    cursor.execute('''
-        SELECT id, vendor_name, current_payment_due
-        FROM invoices
-        ORDER BY current_payment_due DESC
-        LIMIT 5;
-    ''')
-    invoices = cursor.fetchall()
-    conn.close()
+    try:
+        conn = helpers.get_db_connection()
+        cursor = conn.cursor(cursor_factory=DictCursor)
+        cursor.execute('''
+            SELECT id, vendor_name, current_payment_due
+            FROM invoices
+            ORDER BY current_payment_due DESC
+            LIMIT 5;
+        ''')
+        invoices = cursor.fetchall()
+        conn.close()
 
-    response = []
-    for invoice in invoices:
-        response.append({
-            "Invoice ID": invoice["id"],
-            "Vendor Name": invoice["vendor_name"],
-            "Invoice Amount": invoice["current_payment_due"]
-        })
+        response = []
+        for invoice in invoices:
+            response.append({
+                "Invoice ID": invoice["id"],
+                "Vendor Name": invoice["vendor_name"],
+                "Invoice Amount": invoice["current_payment_due"]
+            })
 
-    return jsonify(response)
+        return jsonify(response)
+    
+    except Exception as e:
+        logging.error(f"Error occurred: {str(e)}")
+        return generate_response(500, f"Database error: {str(e)}")
 
 @app.route('/invoice_summary', methods=['GET'])
 def invoice_summary():
-    conn = helpers.get_db_connection()
-    cursor = conn.cursor(cursor_factory=DictCursor)
-    cursor.execute('''
-        SELECT id, vendor_name, balance_to_finish_including_retainage
-        FROM invoices
-        ORDER BY balance_to_finish_including_retainage DESC
-        LIMIT 3;
-    ''')
-    invoice = cursor.fetchone()
-    conn.close()
+    try:
+        conn = helpers.get_db_connection()
+        cursor = conn.cursor(cursor_factory=DictCursor)
+        cursor.execute('''
+            SELECT id, vendor_name, balance_to_finish_including_retainage
+            FROM invoices
+            ORDER BY balance_to_finish_including_retainage DESC
+            LIMIT 3;
+        ''')
+        invoice = cursor.fetchone()
+        conn.close()
 
-    if invoice:
-        response = {
-            "status": 200,
-            "Invoice ID": invoice["id"],
-            "Vendor Name": invoice["vendor_name"],
-            "Balance Pending": invoice["balance_to_finish_including_retainage"]
-        }
-    else:
-        return generate_response(200,"no invoice found")
+        if invoice:
+            response = {
+                "status": 200,
+                "Invoice ID": invoice["id"],
+                "Vendor Name": invoice["vendor_name"],
+                "Balance Pending": invoice["balance_to_finish_including_retainage"]
+            }
+        else:
+            return generate_response(200,"no invoice found")
 
-    return jsonify(response)
-
-@app.route('/')  # Define a route for the home page
+        return jsonify(response)
+    
+    except Exception as e:
+        logging.error(f"Error occurred: {str(e)}")
+        return generate_response(500, f"Database error: {str(e)}")
+    
+@app.route('/')
 def home():
     return "Hello, World!"
 
