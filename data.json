@@ -1,0 +1,51 @@
+[
+    {
+      "id": 58820,
+      "project_id": 789,
+      "billing_date": "2013-11-20",
+      "vendor_name": "Ernie's Electrical",
+      "invoice_number": 123,
+      "total_claimed_amount": 100.00,
+      "payment_date": "2013-11-15",
+      "status": "approved",
+      "summary": {
+        "balance_to_finish_including_retainage": 23000.00,
+        "completed_work_retainage_amount": 1201.00,
+        "contract_sum_to_date": 1279159.15,
+        "current_payment_due": 10812.60
+      }
+    },
+    {
+      "id": 58821,
+      "project_id": 790,
+      "billing_date": "2013-11-21",
+      "vendor_name": "ABC Construction",
+      "invoice_number": 124,
+      "total_claimed_amount": 200.00,
+      "payment_date": "2013-11-16",
+      "status": "approved",
+      "summary": {
+        "balance_to_finish_including_retainage": 15000.00,
+        "completed_work_retainage_amount": 1300.00,
+        "contract_sum_to_date": 1150000.00,
+        "current_payment_due": 15000.00
+      }
+    },
+    {
+      "id": 58822,
+      "project_id": 791,
+      "billing_date": "2013-11-22",
+      "vendor_name": "XYZ Builders",
+      "invoice_number": 125,
+      "total_claimed_amount": 150.00,
+      "payment_date": "2013-11-17",
+      "status": "approved",
+      "summary": {
+        "balance_to_finish_including_retainage": 5000.00,
+        "completed_work_retainage_amount": 1000.00,
+        "contract_sum_to_date": 900000.00,
+        "current_payment_due": 5000.00
+      }
+    }
+  ]
+  
