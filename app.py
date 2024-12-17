@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 import psycopg2
 
 app = Flask(__name__)
@@ -38,6 +38,34 @@ def top_invoices():
 
     return jsonify(response)
 
+@app.route('/invoice_all', methods=['GET'])
+def invoice_all():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Query to fetch all invoices
+    cursor.execute('SELECT * from invoices;')
+    invoices = cursor.fetchall()
+
+    conn.close()
+
+    # Check if there are any invoices
+    if invoices:
+        # Format the response for all invoices
+        response = []
+        for invoice in invoices:
+            response.append({
+                "Invoice ID": invoice[0],  # Assuming invoice ID is in the first column
+                "Vendor Name": invoice[1],  # Assuming vendor name is in the second column
+                "Balance Pending": f"${invoice[2]}"  # Assuming balance is in the third column
+            })
+    else:
+        response = {"message": "No invoices found"}
+
+    return jsonify(response)
+
+    
+
 @app.route('/invoice_summary', methods=['GET'])
 def invoice_summary():
     # Fetch the invoice with the highest balance
@@ -47,7 +75,7 @@ def invoice_summary():
         SELECT id, vendor_name, balance_to_finish_including_retainage
         FROM invoices
         ORDER BY balance_to_finish_including_retainage DESC
-        LIMIT 1;
+        LIMIT 3;
     ''')
     invoice = cursor.fetchone()
     conn.close()
@@ -63,6 +91,10 @@ def invoice_summary():
         response = {"message": "No invoice found"}
 
     return jsonify(response)
+
+@app.route('/')  # Define a route for the home page
+def home():
+    return "Hello, World!"
 
 if __name__ == '__main__':
     app.run(debug=True)
