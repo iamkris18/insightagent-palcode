@@ -12,6 +12,7 @@ client = OpenAI(api_key=config.OPENAI_API_KEY)
 def ask_openai():
     try:
         invoices = helpers.load_invoice_data()
+        # print(invoices)
         if not invoices:
             return generate_response(500, "No invoice data found")
 
@@ -19,25 +20,8 @@ def ask_openai():
         if not user_query:
             return generate_response({400, "Query cannot be empty"})
 
-        invoice_summary = "\n\n".join([
-            "\n".join([
-                f"Invoice ID: {i.get('id', 'N/A')}",
-                f"Vendor: {i.get('vendor_name', 'Unknown')}",
-                f"**Total Claimed Amount:** ${i.get('total_claimed_amount', 0)}",
-                f"Invoice Number: {i.get('invoice_number', 'N/A')}",
-                f"Status: {i.get('status', 'N/A')}",
-                f"Payment Status: {i.get('payment_date', 'N/A')}",
-                f"**Balance to Finish (Including Retainage):** ${i.get('summary', {}).get('balance_to_finish_including_retainage', 0)}",
-                f"**Current Payment Due:** ${i.get('summary', {}).get('current_payment_due', 0):,.1f}",
-                f"Payment Date: {i.get('payment_date', 'N/A')}",
-                f"Created By ID: {i.get('created_by', {}).get('id', 'N/A')}",
-                f"Created By Name: {i.get('created_by', {}).get('name', 'N/A')}",
-                f"Created By Login: {i.get('created_by', {}).get('login', 'N/A')}",
-                f"Created By Company: {i.get('created_by', {}).get('company_name', 'N/A')}"
-            ]) 
-            for i in invoices
-        ])
-
+        invoice_summary =  helpers.invoice_summary(invoices)
+        print(invoice_summary)
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -138,7 +122,8 @@ def invoice_summary():
     
 @app.route('/')
 def home():
-    return "Hello, World!"
+    response = generate_response(200, "Hello World!")
+    return response
 
 def generate_response(status_code, message, data=None):
     response = {
